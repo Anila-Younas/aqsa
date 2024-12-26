@@ -3,12 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirecting...</title>
-    <script>
-        // Redirect to Page 3 (Home.html) as soon as this page is loaded
-        window.location.href = "Home.html";
-    </script>
+    <link rel="stylesheet" href="external.css">
+    <link rel="stylesheet" href="contact.css">
+    <title>BlueGrassHubJewel</title>
 </head>
 <body>
+    <ul>
+        <li><a href="javascript:void(0);" onclick="loadPage('Home.html')">Page 1</a></li>
+        <li><a href="contact.html">Page 2</a></li>
+        <li><a href="product.html">Page 3</a></li>
+        <li><a href="product.html">Page 4</a></li>
+    </ul>
+
+    <div id="content"></div>
+
+    <script>
+        // Load the page content dynamically into the "content" div
+        function loadPage(page) {
+            fetch(page)
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('content').innerHTML = html;
+
+                    // Re-load the styles and scripts to ensure images and CSS work correctly
+                    var styleSheets = document.querySelectorAll('link[rel="stylesheet"]');
+                    styleSheets.forEach(sheet => {
+                        let newSheet = sheet.cloneNode();
+                        document.head.appendChild(newSheet);
+                    });
+
+                    var scripts = document.querySelectorAll('script');
+                    scripts.forEach(script => {
+                        let newScript = script.cloneNode();
+                        document.body.appendChild(newScript);
+                    });
+                })
+                .catch(error => {
+                    console.log('Error loading page: ', error);
+                });
+        }
+
+        // Automatically load Home.html on initial load
+        window.onload = function() {
+            loadPage('Home.html');
+        };
+    </script>
 </body>
 </html>
